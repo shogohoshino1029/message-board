@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Message;    // 追加
+use App\Message;
 
 class MessagesController extends Controller
 {
@@ -23,10 +23,10 @@ class MessagesController extends Controller
     // getでmessages/createにアクセスされた場合の「新規登録画面表示処理」
     public function create()
     {
-        $messages = new Message;
-        
+        $message = new Message;
+
         // メッセージ作成ビューを表示
-        return view('message.create', [
+        return view('messages.create', [
             'message' => $message,
         ]);
     }
@@ -34,45 +34,40 @@ class MessagesController extends Controller
     // postでmessages/にアクセスされた場合の「新規登録処理」
     public function store(Request $request)
     {
-        // バリデーション
-        $request->validate([
-            'content' => 'required|max:255',
-        ]);
-        
         // メッセージを作成
         $message = new Message;
         $message->content = $request->content;
         $message->save();
-        
+
         // トップページへリダイレクトさせる
         return redirect('/');
     }
 
-    // getでmessages/(任意のid)にアクセスされた場合の「取得表示処理」
+    // getでmessages/idにアクセスされた場合の「取得表示処理」
     public function show($id)
     {
         // idの値でメッセージを検索して取得
         $message = Message::findOrFail($id);
-        
+
         // メッセージ詳細ビューでそれを表示
         return view('messages.show', [
             'message' => $message,
         ]);
     }
 
-    // getでmessages/(任意のid)/editにアクセスされた場合の「更新画面表示処理」
+    // getでmessages/id/editにアクセスされた場合の「更新画面表示処理」
     public function edit($id)
     {
         // idの値でメッセージを検索して取得
         $message = Message::findOrFail($id);
-        
+
         // メッセージ編集ビューでそれを表示
         return view('messages.edit', [
             'message' => $message,
         ]);
     }
 
-    // putまたはpatchでmessages/(任意のid)にアクセスされた場合の「更新処理」
+    // putまたはpatchでmessages/idにアクセスされた場合の「更新処理」
     public function update(Request $request, $id)
     {
         // idの値でメッセージを検索して取得
@@ -80,20 +75,20 @@ class MessagesController extends Controller
         // メッセージを更新
         $message->content = $request->content;
         $message->save();
-        
+
         // トップページへリダイレクトさせる
         return redirect('/');
     }
 
-    // deleteでmessages/(任意のid)にアクセスされた場合の「削除処理」
+   // deleteでmessages/idにアクセスされた場合の「削除処理」
     public function destroy($id)
     {
         // idの値でメッセージを検索して取得
         $message = Message::findOrFail($id);
         // メッセージを削除
         $message->delete();
-        
-        //トップページへリダイレクトさせる
+
+        // トップページへリダイレクトさせる
         return redirect('/');
     }
 }
